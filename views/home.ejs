@@ -1,0 +1,44 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>MIni Chats</title>
+</head>
+<body>
+    <h2>Mini Chats</h2>
+    <form method="GET" action="/chat/new">
+        <button>Add Chat</button>
+    </form>
+
+    <% for (let chat of chats) { %>
+        <div class="chat">
+            <p>From: <%= chat.from %></p>
+            <div class="msg">
+                <p>Massage: <%= chat.msg %></p>
+                    <form method="GET" action="/chat/<%=chat._id%>/edit">
+                        <button>Edit</button>
+                    </form>
+
+                    <form method="POST" action="/chat/<%=chat._id%>?_method=DELETE">
+                        <button>Delete</button>
+                    </form>
+            </div>
+            <p>Send by: <%= chat.to %></p>
+            <hr>
+
+            <% if (chat.updatedAt) { %>
+                <p>Time (Updated): <%= chat.updatedAt.toString().split(" ")[4] %></p>
+                <p>Date (Updated): <%= chat.updatedAt.toString().split(" ").slice(0, 4).join("/") %></p>
+                <% } else { %>
+                    <p>Time: <%= chat.createdAt.toString().split(" ")[4] %></p>
+                    <p>Date: <%= chat.createdAt.toString().split(" ").slice(0, 4).join ("-") %></p>
+                <% } %>
+            
+        </div>
+    <% } %>
+
+</body>
+</html>
+
+

@@ -1,0 +1,18 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Massage</title>
+</head>
+<body>
+    <h3>Edit your massage <em><%= chat._id %></em></h3>
+    <p>From: <%= chat.from %>  =>  To: <%= chat.to %></p>
+
+    <form method="POST" action="/chat/<%=chat._id%>?_method=PUT">
+        <textarea rows="5" cols="30" name="msg"><%= chat.msg %></textarea>
+        <p name="updatedAt">Time: <%= chat.createdAt.toString().split(" ")[4] %></p>
+        <p name="updatedAt">Date: <%= chat.createdAt.toString().split(" ").slice(0, 4).join("/") %></p>
+        <button>Submit</button>
+    </form>
+</body>
+</html>

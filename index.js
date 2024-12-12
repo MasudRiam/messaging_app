@@ -8,18 +8,6 @@ const ExpressError = require("./ExpressError")
 
 const Chat = require('./models/chat.js');
 
-
-// Change date and time 
-// const Assignment = mongoose.model('Assignment', { dueDate: Date });
-// const doc = await Assignment.findOne();
-// doc.dueDate.setMonth(3);
-// await doc.save(); // THIS DOES NOT SAVE YOUR CHANGE
-
-// doc.markModified('dueDate');
-// await doc.save()
-
-
-
 app.set ('views', path.join(__dirname, 'views'));
 app.set ('view engine', 'ejs');
 
@@ -55,34 +43,17 @@ app.get ('/chat/new', (req, res, next) => {
 })
 
 
-app.post ('/chat', async (req, res, next) => {
+app.post('/chat', async (req, res, next) => {
     try {
-        let { from, to, msg } = req.body;
-        const { updatedAt } = req.body;
-        let newChat = new Chat ({ 
-            from: from,
-            to: to,
-            msg: msg,
-            createdAt: new Date(),  //new Date() is used to get current date and time automatically. It's not necessary to provide it manually.
-        });
-    
-        newChat.save()
-        .then ((res) => console.log ("Chat saved successfully"))    //when using .then/.catch no need to use aysnc/await
-        .catch ((err) => console.log (err));
-    
-    
-        let updateDate = await Chat.findOne ();
-            if (!updateDate) {
-                updateDate = new Date();
-            }
-        updateDate.updatedAt = new Date(updatedAt);
-        await updateDate.save()
-    
-        res.redirect('/chat')
+        const { from, to, msg } = req.body;
+        const newChat = new Chat({ from, to, msg });
+        await newChat.save(); // Save the new chat to the database
+        console.log("Chat saved successfully");
+        res.redirect('/chat');
     } catch (err) {
-        next (err)
+        next(err); // Pass error to error-handling middleware
     }
-})
+});
 
 
 
@@ -99,19 +70,21 @@ app.get ('/chat/:id/edit', async (req, res, next) => {
 
 
 //update route
-app.put ('/chat/:id', async (req, res, next) => {
+app.put('/chat/:id', async (req, res, next) => {
     try {
-        let { id } = req.params;
-        let { msg: newMsg } = req.body;
-        let chatUpdate = await Chat.findByIdAndUpdate (id, { msg: newMsg }, {updatedAt: newDate()}, {runValidators: true}, { new: true });
-    
-        console.log (chatUpdate);
-        res.redirect('/chat')
+        const { id } = req.params;
+        const { msg: newMsg } = req.body;
+        const chatUpdate = await Chat.findByIdAndUpdate(
+            id,
+            { msg: newMsg }, // Only update the msg field
+            { new: true, runValidators: true } // Return updated document
+        );
+        console.log("Updated chat:", chatUpdate);
+        res.redirect('/chat');
     } catch (err) {
-        next (err);
+        next(err);
     }
-
-})
+});
 
 
 app.delete ('/chat/:id', async (req, res, next) => {

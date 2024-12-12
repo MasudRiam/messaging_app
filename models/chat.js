@@ -1,27 +1,9 @@
 const mongoose = require('mongoose');
 
-const chatSchema = new mongoose.Schema ({
-    from: {
-        type: String,
-        required: true
-    },
-    to: {
-        type: String,
-        required: true
-    },
-    msg: {
-        type: String
-    },
-    createdAt: {
-        type: Date,
-        required: true
-    },
-    updatedAt: {
-        type: Date,
-        default: Date.now
-    }
-})
+const chatSchema = new mongoose.Schema({
+    from: { type: String, required: true },
+    to: { type: String, required: true },
+    msg: { type: String, required: true },
+}, { timestamps: true }); // Automatically adds createdAt and updatedAt fields
 
-const Chat = mongoose.model('Chat', chatSchema);
-
-module.exports = Chat;
+module.exports = mongoose.model('Chat', chatSchema);

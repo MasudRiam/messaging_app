@@ -99,7 +99,7 @@ app.delete ('/chat/:id', async (req, res, next) => {
 })
 
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.send('Hello, My name is Masud Parvez Riam. This site also responsive to the mobile browser')
 })
 
 
